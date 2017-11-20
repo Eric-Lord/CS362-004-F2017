@@ -22,11 +22,31 @@ After playing the Smithy card, the actual effect is that the player draws two ra
 Workarounds: There are no workarounds
 Attachments: none
 Other Information:
-The following screen shot shows the result of the random card test done for the Smithy card effect. The incorrect hand and deck counts can be seen in the test output.
+The following shows the result of the random card test done for the Smithy card effect. The incorrect hand and deck counts can be seen in the test output.
 
-The following screenshot shows the results of the card test done for Smithy. It can be seen that this test is in agreement with the random test. From the test output it can be pinpointed that the incorrect hand count is due to the fact that the players drew one less card than he should have. This can be determined from the fact that the hand increased by two and the deck decreased by two.
+------------------Smithy Start Random Test: 1000 seed: 195494514 -------------------------------------------
+
+FAIL: Player's hand count should increase by two cards - drew three and discard one
+Number of cards in hand before play: 6 
+Number of cards in hand after play: 7 
+Player's hand count is 7 and it should be 8: 
+FAIL: The deck should decrease by three if the players deck contains at least three cards
+Number of cards in deck before play: 48 
+Number of cards in deck after play: 46 
+Player's deck count is 46 and it should be 45: 
 
 
+The following shows the results of the card test done for Smithy. It can be seen that this test is in agreement with the random test. From the test output it can be pinpointed that the incorrect hand count is due to the fact that the players drew one less card than he should have. This can be determined from the fact that the hand increased by two and the deck decreased by two.
+
+----- Testing Smithy card -----
+Test: Player 1 discardCount=0, deckCount=7, and handCount=2
+FAIL: Should add 3 cards to player 1 hand and remove 1
+Hand count should increase by two. 
+Number of cards in hand before play: 2 
+Number of cards in hand after play: 3 
+FAIL: Should draw 3 cards from player 1 deck, so top 3 cards from deck should now be in player 1 hand
+PASS: Should move played card to playedCards - playedCards should have smithy
+PASS: Should not affect other player
 
 
 Bug Report 2
@@ -54,21 +74,60 @@ Workarounds: There are no workarounds
 Attachments: none
 Other Information:
 
-The following screen shot shows the result of the card test done for the Adventurer card effect with one treasure card in the deck. The incorrect hand can be seen in the test output along with the fact that the Adventurer card has not been put in the played cards pile.
+The following shows the result of the card test done for the Adventurer card effect with one treasure card in the deck. The incorrect hand can be seen in the test output along with the fact that the Adventurer card has not been put in the played cards pile.
+
+----- Test: deckCount = 6, deck has gold, discardCount = 0
+PASS: With deck containing only 1 treasure card, player's hand should contain the single treasure card
+FAIL: With deck containing only 1 treasure card, player's hand count should remain the same
+Number of cards in hand before play: 2 
+Number of cards in hand after play: 3 
+PASS: Looking for 2 treasure cards but only one in the deck so will exhaust the deck
+PASS: Should discard all other drawn cards, but keep the treasures
+FAIL: Should move adventurer card to playedCards
+PASS: Should not affect other player
 
 
+The following shows the result of the card test done for the Adventurer card effect with two treasure cards in the deck. The incorrect hand can be seen in the test output along with the fact that the Adventurer card has not been put in the played cards pile. Here the hand contains the correct number of treasure cards because only two were present in the deck/discard. The hand contains one more card than it should which can be attributed to the fact that adventurer has not been played.
 
-The following screen shot shows the result of the card test done for the Adventurer card effect with two treasure cards in the deck. The incorrect hand can be seen in the test output along with the fact that the Adventurer card has not been put in the played cards pile. Here the hand contains the correct number of treasure cards because only two were present in the deck/discard. The hand contains one more card than it should which can be attributed to the fact that adventurer has not been played.
+----- Test: deckCount = 6, deck has gold and silver, discardCount = 0
+PASS: With deck containing two treasure cards, player's hand should get two treasure card
+FAIL: With deck containing two treasure cards, player's hand should increase by one
+Number of cards in hand before play: 2 
+Number of cards in hand after play: 4 
+FAIL: Should discard all other drawn cards, but treasures.
+Number of in discard: 2 , should be 3
+FAIL: Should move adventurer card to playedCards
+FAIL: Should stop drawing cards when 2 treasure cards have been drawn
+Number of cards in deck before play: 6 
+Number of cards in deck after play: 0 
+PASS: Should not affect other player
 
 
+The following shows the result of the card test done for the Adventurer card effect with three treasure cards in the deck. The incorrect hand can be seen in the test output along with the fact that the Adventurer card has not been put in the played cards pile.  This print out shows that the player has been allowed to draw all three treasure cards which increases the difference of between actual and expected hand cards. Here there are two more than there should be Ð one from the added treasure card and one from the lack of a play of adventurer.
 
-The following screen shot shows the result of the card test done for the Adventurer card effect with three treasure cards in the deck. The incorrect hand can be seen in the test output along with the fact that the Adventurer card has not been put in the played cards pile.  This print out shows that the player has been allowed to draw all three treasure cards which increases the difference of between actual and expected hand cards. Here there are two more than there should be Ð one from the added treasure card and one from the lack of a play of adventurer.
+----- Test: deckCount = 6, deck has gold, copper and silver, discardCount = 0
+FAIL: With deck containing three treasure card, player's hand should contain two treasure cards
+Number of in hand: 3 , should be 2
+FAIL: With deck containing three treasure card, player's hand should increase by one
+Number of cards in hand before play: 2 
+Number of cards in hand after play: 5 
+PASS: Should discard all other drawn cards
+FAIL: Should move adventurer card to playedCards
+FAIL: Should stop drawing cards when 2 treasure cards have been drawn
+Number of cards in deck before play: 6 
+Number of cards in deck after play: 1 
+PASS: Should not affect other player
 
 
+The following shows the result of the card test done for the Adventurer card effect with one treasure card in the discard only. The incorrect hand count can be seen in the test output along with the fact that the Adventurer card has not been put in the played cards pile.  Here the one treasure card has been correctly added to the hand, verifying that the shuffle was done. The incorrect hand count in this case resulting from the lack of playing adventurer.
 
-The following screen shot shows the result of the card test done for the Adventurer card effect with one treasure card in the discard only. The incorrect hand count can be seen in the test output along with the fact that the Adventurer card has not been put in the played cards pile.  Here the one treasure card has been correctly added to the hand, verifying that the shuffle was done. The incorrect hand count in this case resulting from the lack of playing adventurer.
-
-
+-------TEST: deckCount = 0, discardCount = 4, discard has gold
+FAIL: Should add discard to deck and shuffle, so one treasure cards is drawn - hand count should not change
+Number of cards in hand before play: 2 
+Number of cards in hand after play: 3 
+PASS: Should add discard to deck and shuffle, so one treasure cards is drawn
+FAIL: Should move adventurer card to playedCards
+PASS: Should not affect other player
 
 
 Bug Report 3
@@ -89,7 +148,17 @@ This bug falsely returns 1 when three supply piles are empty. (Refer to other in
 Workarounds: There are no workarounds
 Attachments: none
 Other Information:
-The following screen shot shows the result of the unit test done for the IsGameOver function. It can be seen that the function should returns 0 when three supply piles are zero but it falsely returns 1.
+The following shows the result of the unit test done for the IsGameOver function. It can be seen that the function should returns 0 when three supply piles are zero but it falsely returns 1.
+
+----------------- Testing isGameOver: ----------------
+TEST 1: supplyCount[province] = 2
+PASS: isGameOver should return 0 when supplyCount[province] > 0
+TEST 2: supplyCount[province] = 2 and one supply pile = 0
+PASS: isGameOver should return 0 when supplyCount[province] > 0 and only one supply pile is empty
+TEST 3: supplyCount[province] = 2 and two supply piles = 0
+PASS: isGameOver should return 0 when supplyCount[province] > 0 and only two supply piles are empty
+TEST 4: supplyCount[province] = 2 and three supply piles = 0
+FAIL: isGameOver should return 1 when supplyCount[province] > 0 but three supply piles are empty
 
 
 
@@ -122,8 +191,21 @@ Test 5 victory cards in discard only => score 3
 Workarounds: There are no workarounds
 Attachments: none
 Other Information:
-The following screen shot shows the result of the unit test done for the ScoreFor function. The score can be seen in the test output. From the test output the only passing tests score cards in the hand only. When there are cards in either the deck or discard score is not correct, which would point to a bug in either of those areas of the code.
+The following shows the result of the unit test done for the ScoreFor function. The score can be seen in the test output. From the test output the only passing tests score cards in the hand only. When there are cards in either the deck or discard score is not correct, which would point to a bug in either of those areas of the code.
 
+TEST 1: testing scoreFor for Player1
+FAIL: score should be 4 because the deck, hand and discard contain victory cards adding to 4
+score 1
+TEST 2: testing scoreFor for Player1
+PASS: scoreFor should return 0 when deck, hand, and discard are empty
+TEST 3: testing scoreFor for Player1 with victory cards in hand only
+PASS: scoreFor should return 3 because only hand contains victory cards
+TEST 4: testing scoreFor for Player1 with victory cards in deck only
+FAIL: scoreFor should return 1 because only deck contains one victory card
+score 0
+TEST 5: testing scoreFor for Player1 with victory cards in discard only
+FAIL: scoreFor should return 1 because only discard contains victory cards
+score 3
 
 
 
