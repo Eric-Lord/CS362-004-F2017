@@ -1,0 +1,129 @@
+Eric Lord
+CS 362 Software Engineering 2
+November 19, 2017
+Assignment 5
+
+
+Bug Report 1
+
+Bug ID: 1
+Bug Title: Smithy card effect method incorrectly handles drawing cards. 
+Product: Dominion code
+Classification: Serious Bug
+Platform: Dominion and tests running on Linux Ð Redhat 7.2
+Steps to Reproduce: 
+Re-running the random card test for Smithy can reproduce this error. There is not a specific game state required to produce the same result. The only caveat being that if the deck does not contain at least three cards the test for the deck count is not performed because it would be affected by the shuffle.
+Effect of the bug: 
+This bug does not allow the player to draw the full amount he is entitled to when playing the Smithy card. He is left drawing one card short of the full number of cards that should be drawn.
+Expected Results: 
+After playing the Smithy card, the expected action is that the player draws three cards. This should result in the playerÕs hand count increasing by two cards and the deck count should decrease by three cards. (in cases where the deck contains more that three cards)
+Actual Results:
+After playing the Smithy card, the actual effect is that the player draws two rather than three cards which results in the playerÕs hand count increasing by one rather than two cards. (Refer to other information below to see how this was determined from the test results)
+Workarounds: There are no workarounds
+Attachments: none
+Other Information:
+The following screen shot shows the result of the random card test done for the Smithy card effect. The incorrect hand and deck counts can be seen in the test output.
+
+The following screenshot shows the results of the card test done for Smithy. It can be seen that this test is in agreement with the random test. From the test output it can be pinpointed that the incorrect hand count is due to the fact that the players drew one less card than he should have. This can be determined from the fact that the hand increased by two and the deck decreased by two.
+
+
+
+
+Bug Report 2
+
+Bug ID: 2
+Bug Title: Adventurer card effect method incorrectly handles drawing treasures and moving card to played cards pile. 
+Product: Dominion code
+Classification: Serious Bug
+Platform: Dominion and tests running on Linux Ð Redhat 7.2
+Steps to Reproduce: 
+Re-running the card test for Adventurer can reproduce this error. The specific game states required to produce the results has been setup in the test. Specific cases are setup with one, two, and three treasure cards preloaded in the deck so that the error can be shown in all three cases. There is also a case where no treasure cards are in the deck but one is in the discard to test if a shuffle is done.
+Effect of the bug: 
+This bug allows the player to attempt to draw the three rather than two treasure cards to when playing the Adventurer card. He is also not actually playing the Adventurer card itself, which results in more cards in his hand that should be there and also might allow a replay of the card if his hand contained a card that would give him more that one action in that turn.
+Expected Results: 
+After playing the Adventurer card, the expected action is that the player draws cards from his deck until he has revealed two treasure cards. If the deck contains less than two treasure cards, the discard is shuffled and the player is then allowed the keep drawing looking for whatever additional treasure cards needed to reach a total of two treasure cards. Shuffling the discard is only allowed to be done once when digging for the cards. When there are two treasure cards available, this card effect should result in the playerÕs hand count increasing by one card Ð adding two treasure cards and playing Adventurer.  When there is only one treasure card available, this card effect should result in the playerÕs hand count remaining the same Ð adding one treasure card and playing Adventurer.
+
+Actual Results:
+When one treasure card is present in the deck, after playing the Adventurer card, the actual effect is that the player adds the one card to his hand but does not play Adventurer, resulting in the playerÕs hand count increasing by one rather remaining the same. (Refer to other information below to see how this was determined from the test results)
+
+When two treasure cards are present in the deck, after playing the Adventurer card, the actual effect is that the player adds the two card to his hand but does not play Adventurer, resulting in the playerÕs hand count increasing by two rather one card. (Refer to other information below to see how this was determined from the test results)
+
+When three treasure cards are present in the deck, after playing the Adventurer card, the actual effect is that the player adds the three card to his hand but does not play Adventurer, resulting in the playerÕs hand count increasing by three rather one card. (Refer to other information below to see how this was determined from the test results)
+
+Workarounds: There are no workarounds
+Attachments: none
+Other Information:
+
+The following screen shot shows the result of the card test done for the Adventurer card effect with one treasure card in the deck. The incorrect hand can be seen in the test output along with the fact that the Adventurer card has not been put in the played cards pile.
+
+
+
+The following screen shot shows the result of the card test done for the Adventurer card effect with two treasure cards in the deck. The incorrect hand can be seen in the test output along with the fact that the Adventurer card has not been put in the played cards pile. Here the hand contains the correct number of treasure cards because only two were present in the deck/discard. The hand contains one more card than it should which can be attributed to the fact that adventurer has not been played.
+
+
+
+The following screen shot shows the result of the card test done for the Adventurer card effect with three treasure cards in the deck. The incorrect hand can be seen in the test output along with the fact that the Adventurer card has not been put in the played cards pile.  This print out shows that the player has been allowed to draw all three treasure cards which increases the difference of between actual and expected hand cards. Here there are two more than there should be Ð one from the added treasure card and one from the lack of a play of adventurer.
+
+
+
+The following screen shot shows the result of the card test done for the Adventurer card effect with one treasure card in the discard only. The incorrect hand count can be seen in the test output along with the fact that the Adventurer card has not been put in the played cards pile.  Here the one treasure card has been correctly added to the hand, verifying that the shuffle was done. The incorrect hand count in this case resulting from the lack of playing adventurer.
+
+
+
+
+Bug Report 3
+
+Bug ID: 3
+Bug Title: IsGameOver function does not correctly determine end of game
+Product: Dominion code
+Classification: Serious Bug
+Platform: Dominion and tests running on Linux Ð Redhat 7.2
+Steps to Reproduce: 
+Re-running the unit test for IsGameOver can reproduce this error. The specific game states required to produce the results have been setup in the test.
+Effect of the bug: 
+This bug does not allow the end of game to be determined correctly; specifically, the game should be over when any three supply piles are empty even if the stack of province cards has not been exhausted. This will result in not properly terminating of the game when it should actually be over.
+Expected Results: 
+The game should be over when the province supply count is zero or any three supply piles are 0.
+Actual Results:
+This bug falsely returns 1 when three supply piles are empty. (Refer to other information below to see how this was determined from the test results)
+Workarounds: There are no workarounds
+Attachments: none
+Other Information:
+The following screen shot shows the result of the unit test done for the IsGameOver function. It can be seen that the function should returns 0 when three supply piles are zero but it falsely returns 1.
+
+
+
+Bug Report 4
+
+Bug ID: 4
+Bug Title: ScoreFor function does not correctly calculate the score
+Product: Dominion code
+Classification: Serious Bug
+Platform: Dominion and tests running on Linux Ð Redhat 7.2
+Steps to Reproduce: 
+Re-running the unit test for ScoreFor can reproduce this error. The specific game states required to produce the results have been setup in the test.
+Effect of the bug: 
+This bug does not correctly calculate the game score. This could allow the wrong player to win the game.
+Expected Results: 
+The score should be determined by adding points for the following cards found in the playerÕs deck, hand or discard: curse (-1), estate (+1), duchy(+3),  province(+6),  great_hall(+1), or gardens (+1 for every 10 cards).
+After having the following hand, deck and discard setup the score should be:
+Test 1 victory cards in hand, deck, and discard => score 4
+Test 2 no victory cards in hand, deck, or discard => score 0
+Test 3 victory cards in hand only => score 3
+Test 4 victory cards in deck only => score 1
+Test 5 victory cards in discard only => score 1
+Actual Results:
+After having the following hand, deck and discard setup the score should be:
+Test 1 victory cards in hand, deck, and discard => score 4
+Test 2 no victory cards in hand, deck, or discard => score 0
+Test 3 victory cards in hand only => score 1
+Test 4 victory cards in deck only => score 0
+Test 5 victory cards in discard only => score 3
+Workarounds: There are no workarounds
+Attachments: none
+Other Information:
+The following screen shot shows the result of the unit test done for the ScoreFor function. The score can be seen in the test output. From the test output the only passing tests score cards in the hand only. When there are cards in either the deck or discard score is not correct, which would point to a bug in either of those areas of the code.
+
+
+
+
