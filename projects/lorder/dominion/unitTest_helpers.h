@@ -176,6 +176,23 @@ int hasCardTreasure(int *arrayToSearch, int arrayCount)
 	//card not found
 	return 0;
 }
+
+int numCardTreasure(int *arrayToSearch, int arrayCount)
+{
+
+	int i = 0;
+	int numTreasures = 0;
+
+	/* Search array for the target card */
+	for (i = 0; i < arrayCount; i++) {
+		if (arrayToSearch[i] == copper || arrayToSearch[i] == silver || arrayToSearch[i] == gold) {
+			numTreasures++;
+		}
+	}
+	//card not found
+	return numTreasures;
+}
+
 void printHand(struct gameState *G, int player) {
 	int card;
 	char cardName[50] = "";

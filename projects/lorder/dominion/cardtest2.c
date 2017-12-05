@@ -469,10 +469,32 @@ int test_Adventurer() {
     printf("All tests passed for Adventurer!\n");
   }
 
-  return 0;
+  return testFailed;
 }
 
 int main() {
-  test_Adventurer();
+  
+  int testFailed;
+  testFailed = test_Adventurer();
+  FILE *f = fopen("testOutput.txt", "w");
+  if (f == NULL)
+  {
+      printf("Error opening file!\n");
+      exit(1);
+  }
+
+  char *text;
+  if (testFailed == 1)
+  {
+    const char *textF = "FAILED";
+    fprintf(f, "%s", textF);
+  }
+  else
+  {
+    const char *textP = "PASSED";
+    fprintf(f, "%s", textP);
+  }
+  fclose(f);
+  
   return 0;
 }
