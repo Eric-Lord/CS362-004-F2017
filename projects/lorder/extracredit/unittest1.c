@@ -32,7 +32,7 @@
 #define Player1 0
 #define Player2 1
 
-void test_buyCard()
+int test_buyCard()
 {
 	int changed;
     int seed = 1000;
@@ -240,10 +240,31 @@ void test_buyCard()
 	{
 		printf("All tests passed for buyCard!\n");
 	}
-
+	return testFailed;
 }
 
 int main() {
-    test_buyCard();
+    
+  int testFailed;
+  testFailed = test_buyCard();
+  FILE *f = fopen("testOutput.txt", "w");
+  if (f == NULL)
+  {
+      printf("Error opening file!\n");
+      exit(1);
+  }
+
+  char *text;
+  if (testFailed == 1)
+  {
+    const char *textF = "FAILED";
+    fprintf(f, "%s", textF);
+  }
+  else
+  {
+    const char *textP = "PASSED";
+    fprintf(f, "%s", textP);
+  }
+  fclose(f);
     return 0;
 }

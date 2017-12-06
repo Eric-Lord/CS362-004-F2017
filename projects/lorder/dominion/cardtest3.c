@@ -110,32 +110,10 @@ int test_Outpost()
     printf("All tests passed for isGameOver!\n");
   }
 
-  return testFailed;
+  return 0;
 }
 
 int main() {
-  
-  int testFailed;
-  testFailed = test_Outpost();
-  FILE *f = fopen("testOutput.txt", "w");
-  if (f == NULL)
-  {
-      printf("Error opening file!\n");
-      exit(1);
-  }
-
-  char *text;
-  if (testFailed == 1)
-  {
-    const char *textF = "FAILED";
-    fprintf(f, "%s", textF);
-  }
-  else
-  {
-    const char *textP = "PASSED";
-    fprintf(f, "%s", textP);
-  }
-  fclose(f);
-  
+  test_Outpost();
   return 0;
 }

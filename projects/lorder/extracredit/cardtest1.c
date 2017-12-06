@@ -1,8 +1,8 @@
 
-/* Card Test for Village
-   Village behavior:
-     - allows the player to draw a card
-     - adds 2 to the actions
+/* Card Test for Smithy
+   Smithy behavior:
+     - draw three cards from the deck and add them to their hand
+     - discard the smithy card
 */
 
 #include <stdio.h>
@@ -12,8 +12,9 @@
 
 #define Player1 0
 #define Player2 1
+#define HANDPOSITION 2
 
-int test_Village() 
+int test_Smithy() 
 {
   
   int seed = 1000;
@@ -25,18 +26,18 @@ int test_Village()
   int assertResult;
   int testFailed = 0;
   int handpos = 0, choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0;
-
+  
   // initialize a game state and player cards
   initializeGame(numPlayers, k, seed, &G);
 
-  printf("----- Testing Village card -----\n");
+  printf("----- Testing Smithy card -----\n");
 
   /* Set up state for the players */
   printf("Test: Player 1 discardCount=0, deckCount=7, and handCount=2\n");
   
   G.whoseTurn = Player1;
   //initialize deck, hand and discard for player 1
-  G.hand[Player1][0] = village;
+  G.hand[Player1][0] = smithy;
   G.hand[Player1][1] = gardens;
   G.handCount[Player1] = 2;
   G.deck[Player1][0] = great_hall;
@@ -48,33 +49,32 @@ int test_Village()
   G.deck[Player1][6] = gold;
   G.deckCount[Player1] = 7;
   G.discardCount[Player1] = 0;
-  G.outpostPlayed = 0;
 
   // copy the game state to a test case
   memcpy(&testG, &G, sizeof(struct gameState));
 
-  cardEffect(village, choice1, choice2, choice3, &testG, handpos, &bonus);
+  cardEffect(smithy, choice1, choice2, choice3, &testG, handpos, &bonus);
 
-  /* Hand count should remain the same */
-  assertResult = unitTestAssert("Players hand count should remain the same - draw one card then play village", (testG.handCount[Player1] == G.handCount[Player1]),2);
+  /* Should add three cards to player 1 hand and subtract one because the Smithy card should be discarded */
+  assertResult = unitTestAssert("Should add 3 cards to player 1 hand and remove 1", (testG.handCount[Player1] == G.handCount[Player1] + 3 - 1),2);
   if(assertResult == 0)
   {
+    printf("Hand count should increase by two. \n", G.handCount[Player1]);
     printf("Number of cards in hand before play: %d \n", G.handCount[Player1]);
     printf("Number of cards in hand after play: %d \n", testG.handCount[Player1]);
     testFailed = 1;
   }
 
+  /* Should draw three cards from player 1 deck */
+  assertResult = unitTestAssert("Should draw 3 cards from player 1 deck, so top 3 cards from deck should now be in player 1 hand",
+    (hasCard(gold, testG.hand[Player1], testG.handCount[Player1])
+    && hasCard(village, testG.hand[Player1], testG.handCount[Player1])
+    && hasCard(silver, testG.hand[Player1], testG.handCount[Player1])),2
+  );
 
-  /* Should increment the actions by 2 */
-  assertResult = unitTestAssert("Should increment the actions by 2", (testG.numActions == G.numActions + 2),2);
-  if(assertResult == 0)
-  {
-    testFailed = 1;
-  }
-  
-  /* Should move played card to playedCards - playedCards should have village */
-  assertResult = unitTestAssert("Should move played card to playedCards - playedCards should have village",
-    (hasCard(village, testG.playedCards, testG.playedCardCount)),2);
+  /* Should move played card to playedCards - playedCards should have smithy */
+  assertResult = unitTestAssert("Should move played card to playedCards - playedCards should have smithy",
+    (hasCard(smithy, testG.playedCards, testG.playedCardCount)),2);
 
   /* Should not affect other players */
   int deckChanged = 0;
@@ -117,13 +117,37 @@ int test_Village()
 
   if(testFailed == 0)
   {
-    printf("All tests passed for Village!\n");
+    printf("All tests passed for Smithy!\n");
   }
 
-  return 0;
+  return testFailed;
 }
 
 int main() {
-  test_Village();
+  int testFailed;
+  testFailed = test_Smithy();
+  FILE *f = fopen("testOutput.txt", "w");
+  if (f == NULL)
+  {
+      printf("Error opening file!\n");
+      exit(1);
+  }
+
+  char *text;
+  if (testFailed == 1)
+  {
+    const char *textF = "FAILED";
+    fprintf(f, "%s", textF);
+  }
+  else
+  {
+    const char *textP = "PASSED";
+    fprintf(f, "%s", textP);
+  }
+  fclose(f);
+  
   return 0;
 }
+
+
+

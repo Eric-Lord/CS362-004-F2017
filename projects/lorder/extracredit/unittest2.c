@@ -30,7 +30,7 @@
 #define CARD2 steward
 #define CARD3 embargo
 
-void test_isGameOver()
+int test_isGameOver()
 {
 	int changed;
     int seed = 1000;
@@ -125,7 +125,7 @@ void test_isGameOver()
 	result = isGameOver(&testG);
 
 	//result should be 1 because supplyCount[province] > 0 but three supply piles are empty
-	assertResult = unitTestAssert("isGameOver should return 1 when supplyCount[province] > 0 but three supply piles are empty", (result == 0),2);
+	assertResult = unitTestAssert("isGameOver should return 1 when supplyCount[province] > 0 but three supply piles are empty", (result == 1),2);
 	if(assertResult == 0)
 	{
 		testFailed = 1;
@@ -135,9 +135,32 @@ void test_isGameOver()
 	{
 		printf("All tests passed for isGameOver!\n");
 	}
+
+	return testFailed;
 }
 
 int main() {
-    test_isGameOver();
+ 
+  int testFailed;
+  testFailed = test_isGameOver();
+  FILE *f = fopen("testOutput.txt", "w");
+  if (f == NULL)
+  {
+      printf("Error opening file!\n");
+      exit(1);
+  }
+
+  char *text;
+  if (testFailed == 1)
+  {
+    const char *textF = "FAILED";
+    fprintf(f, "%s", textF);
+  }
+  else
+  {
+    const char *textP = "PASSED";
+    fprintf(f, "%s", textP);
+  }
+  fclose(f);
     return 0;
 }
